@@ -1,0 +1,31 @@
+type Query {
+  user(id: ID!): User
+}
+
+type Mutation {
+  createUser(input: CreateUserInput): User
+  signIn(input: SignInInput): SignIn
+}
+
+type SignIn {
+  user: User
+  access_token: String
+}
+
+type User {
+  id: Int!
+  name: String
+  email: String
+  tasks: [Task]
+}
+
+input SignInInput {
+  email: String
+  password: String
+}
+
+input CreateUserInput {
+  name: String
+  email: String
+  password: String
+}
