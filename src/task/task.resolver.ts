@@ -15,6 +15,14 @@ import { CreateTaskDto } from './dtos/create-task.dto';
 export class TaskResolver {
   constructor(private taskService: TaskService) {}
 
+  @Query('tasks')
+  async tasks(@Args('user_ids') user_ids: number[]) {
+    const tasks = await this.taskService.findAllTasks(
+      user_ids?.map((id) => +id),
+    );
+    return tasks;
+  }
+
   @Query('task')
   async task(@Args('id', ParseIntPipe) id: number) {
     const task = await this.taskService.findTask(id);
@@ -23,8 +31,7 @@ export class TaskResolver {
 
   @ResolveField()
   async users(@Parent() task: Task) {
-    const userTasks = await this.taskService.getTaskUsers(task.id);
-    return userTasks.map((userTask) => userTask.user);
+    return this.taskService.getTaskUsers(task.id);
   }
 
   @Mutation()

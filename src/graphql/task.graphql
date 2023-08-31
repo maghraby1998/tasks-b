@@ -1,4 +1,5 @@
 type Query {
+  tasks(user_ids: [ID]): [Task]
   task(id: ID!): Task
 }
 

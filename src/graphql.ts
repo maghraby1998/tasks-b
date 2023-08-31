@@ -35,6 +35,8 @@ export abstract class IMutation {
 export abstract class IQuery {
     abstract task(id: string): Nullable<Task> | Promise<Nullable<Task>>;
 
+    abstract tasks(user_ids?: Nullable<Nullable<string>[]>): Nullable<Nullable<Task>[]> | Promise<Nullable<Nullable<Task>[]>>;
+
     abstract user(id: string): Nullable<User> | Promise<Nullable<User>>;
 }
 
