@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -8,6 +8,10 @@ import { join } from 'path';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { TaskModule } from './task/task.module';
 import { AuthModule } from './auth/auth.module';
+import { ProjectModule } from './project/project.module';
+import { AuthMiddleware } from './middlewares/auth.middleware';
+import { PrismaService } from './prisma.service';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -24,9 +28,19 @@ import { AuthModule } from './auth/auth.module';
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
+    JwtModule.register({
+      global: true,
+      secret: 'randomsecretkeyfornowishouldchangeitforlater',
+      signOptions: { expiresIn: '1000s' },
+    }),
     AuthModule,
+    ProjectModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PrismaService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('*');
+  }
+}

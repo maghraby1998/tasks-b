@@ -10,6 +10,8 @@ import { TaskService } from './task.service';
 import { CreateTaskInput, Task } from 'src/graphql';
 import { ParseIntPipe } from '@nestjs/common';
 import { CreateTaskDto } from './dtos/create-task.dto';
+import { Auth } from 'src/decorators/auth.decorator';
+import { User } from '@prisma/client';
 
 @Resolver('Task')
 export class TaskResolver {

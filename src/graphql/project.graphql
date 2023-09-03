@@ -1,0 +1,34 @@
+type Query {
+  projects: [Project]
+}
+
+type Mutation {
+  upsertProject(input: UpsertProjectInput): Project
+}
+
+type Project {
+  id: Int!
+  name: String!
+  created_at: String!
+  stages: [Stage]
+  users: [User]
+  tasks: [Task]
+}
+
+type Stage {
+  id: Int!
+  name: String!
+  order: Int!
+  project: Project
+  tasks: [Task]
+}
+
+input UpsertProjectInput {
+  name: String
+  stages: [CreateStageInput]
+}
+
+input CreateStageInput {
+  name: String!
+  order: Int!
+}
