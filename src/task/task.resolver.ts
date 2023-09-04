@@ -38,6 +38,16 @@ export class TaskResolver {
 
   @Mutation()
   async createTask(@Args('input') input: CreateTaskDto) {
-    return this.taskService.createTask(input.name, input.usersIds);
+    return this.taskService.createTask(
+      input.name,
+      input.projectId,
+      input.stageId,
+      input.usersIds,
+    );
+  }
+
+  @Mutation()
+  async updateTaskStage(@Args('input') input: any) {
+    return this.taskService.updateTaskStage(input?.taskId, input?.stageId);
   }
 }

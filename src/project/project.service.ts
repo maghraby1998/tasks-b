@@ -12,19 +12,21 @@ export class ProjectService {
     return projects;
   }
 
-  async createProject(name: string, stages: Stage[]) {
+  async createProject(name: string, stages: Stage[] = []) {
     const project = await this.prisma.project.create({
       data: { name, created_at: new Date() },
     });
 
-    const stagesToStore = stages.map((stage) => ({
-      ...stage,
-      projectId: project.id,
-    }));
+    if (stages.length) {
+      const stagesToStore = stages.map((stage) => ({
+        ...stage,
+        projectId: project.id,
+      }));
 
-    await this.prisma.stage.createMany({
-      data: stagesToStore,
-    });
+      await this.prisma.stage.createMany({
+        data: stagesToStore,
+      });
+    }
 
     return project;
   }
@@ -34,6 +36,11 @@ export class ProjectService {
       where: {
         projectId,
       },
+      include: { tasks: true },
     });
+  }
+
+  async findOne(id: number) {
+    return this.prisma.project.findUnique({ where: { id } });
   }
 }

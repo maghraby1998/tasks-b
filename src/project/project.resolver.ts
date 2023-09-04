@@ -8,10 +8,16 @@ import {
 } from '@nestjs/graphql';
 import { ProjectService } from './project.service';
 import { Project } from 'src/graphql';
+import { ParseIntPipe } from '@nestjs/common';
 
 @Resolver('Project')
 export class ProjectResolver {
   constructor(private projectService: ProjectService) {}
+
+  @Query('project')
+  async project(@Args('id', ParseIntPipe) id: number) {
+    return this.projectService.findOne(id);
+  }
 
   @Query('projects')
   async projects() {

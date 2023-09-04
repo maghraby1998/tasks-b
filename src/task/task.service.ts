@@ -43,20 +43,45 @@ export class TaskService {
     return userTasks.map((userTask) => userTask.user);
   }
 
-  async createTask(name: string, usersIds: number[]) {
-    // const task = await this.prisma.task.create({
-    //   data: {
-    //     name,
-    //     created_at: new Date(),
-    //   },
-    // });
-    // const userTasks = usersIds.map((userId) => ({
-    //   userId: +userId,
-    //   taskId: task.id,
-    // }));
-    // await this.prisma.userTask.createMany({
-    //   data: userTasks,
-    // });
-    // return task;
+  async createTask(
+    name: string,
+    projectId: number,
+    stageId: number,
+    userIds: number[] = [],
+  ) {
+    const task = await this.prisma.task.create({
+      data: {
+        name,
+        project: {
+          connect: { id: +projectId },
+        },
+        stage: {
+          connect: {
+            id: +stageId,
+          },
+        },
+        created_at: new Date(),
+      },
+    });
+
+    if (userIds.length) {
+      const userTaskData = userIds?.map((userId: number) => ({
+        userId,
+        taskId: task.id,
+      }));
+
+      await this.prisma.userTask.createMany({
+        data: userTaskData,
+      });
+    }
+
+    return task;
+  }
+
+  async updateTaskStage(taskId: number, stageId: number) {
+    return this.prisma.task.update({
+      where: { id: taskId },
+      data: { stageId },
+    });
   }
 }

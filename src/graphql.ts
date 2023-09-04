@@ -15,6 +15,8 @@ export class CreateStageInput {
 
 export class CreateTaskInput {
     name?: Nullable<string>;
+    projectId?: Nullable<string>;
+    stageId?: Nullable<string>;
     usersIds?: Nullable<Nullable<string>[]>;
 }
 
@@ -29,6 +31,11 @@ export class SignInInput {
     password?: Nullable<string>;
 }
 
+export class UpdateTaskStageInput {
+    stageId?: Nullable<number>;
+    taskId?: Nullable<number>;
+}
+
 export class UpsertProjectInput {
     name?: Nullable<string>;
     stages?: Nullable<Nullable<CreateStageInput>[]>;
@@ -40,6 +47,8 @@ export abstract class IMutation {
     abstract createUser(input?: Nullable<CreateUserInput>): Nullable<User> | Promise<Nullable<User>>;
 
     abstract signIn(input?: Nullable<SignInInput>): Nullable<SignIn> | Promise<Nullable<SignIn>>;
+
+    abstract updateTaskStage(input?: Nullable<UpdateTaskStageInput>): Nullable<Task> | Promise<Nullable<Task>>;
 
     abstract upsertProject(input?: Nullable<UpsertProjectInput>): Nullable<Project> | Promise<Nullable<Project>>;
 }
@@ -54,6 +63,8 @@ export class Project {
 }
 
 export abstract class IQuery {
+    abstract project(id: string): Nullable<Project> | Promise<Nullable<Project>>;
+
     abstract projects(): Nullable<Nullable<Project>[]> | Promise<Nullable<Nullable<Project>[]>>;
 
     abstract task(id: string): Nullable<Task> | Promise<Nullable<Task>>;
