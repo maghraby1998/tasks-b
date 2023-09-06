@@ -80,8 +80,8 @@ export class TaskService {
 
   async updateTaskStage(taskId: number, stageId: number) {
     return this.prisma.task.update({
-      where: { id: taskId },
-      data: { stageId },
+      where: { id: +taskId },
+      data: { stageId: +stageId },
     });
   }
 }

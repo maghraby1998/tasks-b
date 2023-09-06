@@ -32,8 +32,8 @@ export class SignInInput {
 }
 
 export class UpdateTaskStageInput {
-    stageId?: Nullable<number>;
-    taskId?: Nullable<number>;
+    stageId?: Nullable<string>;
+    taskId?: Nullable<string>;
 }
 
 export class UpsertProjectInput {
