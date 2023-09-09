@@ -9,6 +9,8 @@ import {
 import { ProjectService } from './project.service';
 import { Project } from 'src/graphql';
 import { ParseIntPipe } from '@nestjs/common';
+import { Auth } from 'src/decorators/auth.decorator';
+import { User } from '@prisma/client';
 
 @Resolver('Project')
 export class ProjectResolver {
@@ -20,8 +22,8 @@ export class ProjectResolver {
   }
 
   @Query('projects')
-  async projects() {
-    return this.projectService.findAll();
+  async projects(@Auth() auth: User) {
+    return this.projectService.findAll(auth);
   }
 
   @ResolveField()
@@ -29,8 +31,30 @@ export class ProjectResolver {
     return this.projectService.findProjectStages(project.id);
   }
 
+  @ResolveField()
+  async users(@Parent() project: Project) {
+    return this.projectService.findProjectUsers(project.id);
+  }
+
   @Mutation('upsertProject')
-  async upsertProject(@Args('input') input: any) {
-    return this.projectService.createProject(input?.name, input?.stages);
+  async upsertProject(@Args('input') input: any, @Auth() auth: User) {
+    return this.projectService.createProject(auth, input?.name, input?.stages);
+  }
+
+  @Mutation('updateProject')
+  async updateProject(@Args('input') input: any, @Auth() auth: User) {
+    return this.projectService.updateProject(
+      auth,
+      input?.id,
+      input?.name,
+      input?.stages,
+    );
+  }
+
+  @Mutation('addUserToProject')
+  async addUserToProject(
+    @Args('input') input: { userId: number; projectId: number },
+  ) {
+    return this.projectService.addUserToProject(input.userId, input.projectId);
   }
 }

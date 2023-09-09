@@ -8,6 +8,11 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export class AddUserToProjectInput {
+    projectId: number;
+    userId: number;
+}
+
 export class CreateStageInput {
     name: string;
     order: number;
@@ -31,6 +36,18 @@ export class SignInInput {
     password?: Nullable<string>;
 }
 
+export class UpdateProjectInput {
+    id?: Nullable<number>;
+    name?: Nullable<string>;
+    stages?: Nullable<Nullable<UpdateStageInput>[]>;
+}
+
+export class UpdateStageInput {
+    id?: Nullable<number>;
+    name: string;
+    order: number;
+}
+
 export class UpdateTaskStageInput {
     stageId?: Nullable<string>;
     taskId?: Nullable<string>;
@@ -42,11 +59,15 @@ export class UpsertProjectInput {
 }
 
 export abstract class IMutation {
+    abstract addUserToProject(input?: Nullable<AddUserToProjectInput>): Nullable<Project> | Promise<Nullable<Project>>;
+
     abstract createTask(input?: Nullable<CreateTaskInput>): Nullable<Task> | Promise<Nullable<Task>>;
 
     abstract createUser(input?: Nullable<CreateUserInput>): Nullable<User> | Promise<Nullable<User>>;
 
     abstract signIn(input?: Nullable<SignInInput>): Nullable<SignIn> | Promise<Nullable<SignIn>>;
+
+    abstract updateProject(input?: Nullable<UpdateProjectInput>): Nullable<Project> | Promise<Nullable<Project>>;
 
     abstract updateTaskStage(input?: Nullable<UpdateTaskStageInput>): Nullable<Task> | Promise<Nullable<Task>>;
 
