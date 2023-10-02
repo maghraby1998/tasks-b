@@ -84,4 +84,13 @@ export class TaskService {
       data: { stageId: +stageId },
     });
   }
+
+  async updateTask(id: number, name: string, taskUsers: number[]) {
+    return this.prisma.task.update({
+      where: { id },
+      data: {
+        name,
+      },
+    });
+  }
 }

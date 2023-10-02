@@ -16,14 +16,17 @@ export class ProjectService {
       },
     });
 
-    console.log(projectUser);
-
     const projects = projectUser.map((projectUser) => projectUser.project);
 
     return projects;
   }
 
-  async createProject(auth: User, name: string, stages: Stage[] = []) {
+  async createProject(
+    auth: User,
+    name: string,
+    stages: Stage[] = [],
+    users: number[] = [],
+  ) {
     const project = await this.prisma.project.create({
       data: { name, created_at: new Date() },
     });
@@ -54,43 +57,64 @@ export class ProjectService {
       });
     }
 
+    if (users.length) {
+      const userProjectData = users.map((id) => ({
+        userId: id,
+        projectId: project.id,
+      }));
+      await this.prisma.projectUser.createMany({
+        data: userProjectData,
+      });
+    }
+
     return project;
   }
 
   async updateProject(
-    auth: User,
     projectId: number,
     name: string,
     stages: Stage[] = [],
+    users: number[] = [],
   ) {
-    const project = await this.prisma.project.update({
+    const allProjectStages = await this.prisma.stage.findMany({
+      where: { projectId },
+    });
+
+    allProjectStages.forEach(async (projectStage) => {
+      const stage = stages.find((stage) => stage.id == projectStage.id);
+
+      if (!!!stage) {
+        await this.prisma.stage.delete({
+          where: { id: projectStage.id },
+        });
+      }
+    });
+
+    if (stages.length) {
+      stages.forEach(async (stage) => {
+        if (stage.id) {
+          await this.prisma.stage.update({
+            where: { id: stage.id },
+            data: stage,
+          });
+        } else {
+          await this.prisma.stage.create({
+            data: { ...stage, projectId },
+          });
+        }
+      });
+    }
+
+    await this.prisma.project.update({
       where: { id: projectId },
       data: {
         name,
       },
     });
 
-    stages.forEach(async (stage) => {
-      await this.prisma.stage.update({
-        where: { id: stage.id },
-        data: stage,
-      });
+    const project = await this.prisma.project.findUnique({
+      where: { id: projectId },
     });
-
-    // await this.prisma.projectUser.create({
-    //   data: {
-    //     project: {
-    //       connect: {
-    //         id: project.id,
-    //       },
-    //     },
-    //     user: {
-    //       connect: {
-    //         id: auth.id,
-    //       },
-    //     },
-    //   },
-    // });
 
     return project;
   }
@@ -100,6 +124,7 @@ export class ProjectService {
       where: {
         projectId,
       },
+      orderBy: { order: 'asc' },
       include: { tasks: true },
     });
   }
@@ -121,29 +146,5 @@ export class ProjectService {
 
   async findOne(id: number) {
     return this.prisma.project.findUnique({ where: { id } });
-  }
-
-  async addUserToProject(userId: number, projectId: number) {
-    const projectUser = await this.prisma.projectUser.findFirst({
-      where: {
-        userId,
-        projectId,
-      },
-    });
-
-    if (projectUser) {
-      throw new BadRequestException('user already belongs to that project');
-    } else {
-      await this.prisma.projectUser.create({
-        data: {
-          userId,
-          projectId,
-        },
-      });
-
-      return await this.prisma.project.findUnique({
-        where: { id: projectId },
-      });
-    }
   }
 }

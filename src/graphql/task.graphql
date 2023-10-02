@@ -5,6 +5,7 @@ type Query {
 
 type Mutation {
   createTask(input: CreateTaskInput): Task
+  updateTask(input: UpdateTaskInput): Task
   updateTaskStage(input: UpdateTaskStageInput): Task
 }
 
@@ -19,6 +20,12 @@ input CreateTaskInput {
   name: String
   projectId: ID
   stageId: ID
+  usersIds: [ID]
+}
+
+input UpdateTaskInput {
+  id: ID
+  name: String
   usersIds: [ID]
 }
 

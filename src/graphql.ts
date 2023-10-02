@@ -8,11 +8,6 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export class AddUserToProjectInput {
-    projectId: number;
-    userId: number;
-}
-
 export class CreateStageInput {
     name: string;
     order: number;
@@ -31,6 +26,11 @@ export class CreateUserInput {
     password?: Nullable<string>;
 }
 
+export class InviteUserToProjectInput {
+    email: string;
+    projectId: number;
+}
+
 export class SignInInput {
     email?: Nullable<string>;
     password?: Nullable<string>;
@@ -40,12 +40,19 @@ export class UpdateProjectInput {
     id?: Nullable<number>;
     name?: Nullable<string>;
     stages?: Nullable<Nullable<UpdateStageInput>[]>;
+    users?: Nullable<Nullable<string>[]>;
 }
 
 export class UpdateStageInput {
     id?: Nullable<number>;
     name: string;
     order: number;
+}
+
+export class UpdateTaskInput {
+    id?: Nullable<string>;
+    name?: Nullable<string>;
+    usersIds?: Nullable<Nullable<string>[]>;
 }
 
 export class UpdateTaskStageInput {
@@ -56,18 +63,35 @@ export class UpdateTaskStageInput {
 export class UpsertProjectInput {
     name?: Nullable<string>;
     stages?: Nullable<Nullable<CreateStageInput>[]>;
+    users?: Nullable<Nullable<string>[]>;
+}
+
+export class Invitation {
+    id?: Nullable<number>;
+    project?: Nullable<Project>;
+    receiver?: Nullable<User>;
+    sender?: Nullable<User>;
+    status?: Nullable<string>;
 }
 
 export abstract class IMutation {
-    abstract addUserToProject(input?: Nullable<AddUserToProjectInput>): Nullable<Project> | Promise<Nullable<Project>>;
+    abstract acceptInvitation(invitationId?: Nullable<number>): Nullable<Invitation> | Promise<Nullable<Invitation>>;
+
+    abstract cancelInvitation(invitationId?: Nullable<number>): Nullable<Invitation> | Promise<Nullable<Invitation>>;
 
     abstract createTask(input?: Nullable<CreateTaskInput>): Nullable<Task> | Promise<Nullable<Task>>;
 
     abstract createUser(input?: Nullable<CreateUserInput>): Nullable<User> | Promise<Nullable<User>>;
 
+    abstract inviteUserToProject(input?: Nullable<InviteUserToProjectInput>): Nullable<Project> | Promise<Nullable<Project>>;
+
+    abstract rejectInvitation(invitationId?: Nullable<number>): Nullable<Invitation> | Promise<Nullable<Invitation>>;
+
     abstract signIn(input?: Nullable<SignInInput>): Nullable<SignIn> | Promise<Nullable<SignIn>>;
 
     abstract updateProject(input?: Nullable<UpdateProjectInput>): Nullable<Project> | Promise<Nullable<Project>>;
+
+    abstract updateTask(input?: Nullable<UpdateTaskInput>): Nullable<Task> | Promise<Nullable<Task>>;
 
     abstract updateTaskStage(input?: Nullable<UpdateTaskStageInput>): Nullable<Task> | Promise<Nullable<Task>>;
 
@@ -87,6 +111,10 @@ export abstract class IQuery {
     abstract project(id: string): Nullable<Project> | Promise<Nullable<Project>>;
 
     abstract projects(): Nullable<Nullable<Project>[]> | Promise<Nullable<Nullable<Project>[]>>;
+
+    abstract receivedInvitations(): Nullable<Nullable<Invitation>[]> | Promise<Nullable<Nullable<Invitation>[]>>;
+
+    abstract sentInvitations(): Nullable<Nullable<Invitation>[]> | Promise<Nullable<Nullable<Invitation>[]>>;
 
     abstract task(id: string): Nullable<Task> | Promise<Nullable<Task>>;
 

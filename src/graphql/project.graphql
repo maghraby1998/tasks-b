@@ -6,7 +6,6 @@ type Query {
 type Mutation {
   upsertProject(input: UpsertProjectInput): Project
   updateProject(input: UpdateProjectInput): Project
-  addUserToProject(input: AddUserToProjectInput): Project
 }
 
 type Project {
@@ -29,12 +28,14 @@ type Stage {
 input UpsertProjectInput {
   name: String
   stages: [CreateStageInput]
+  users: [ID]
 }
 
 input UpdateProjectInput {
   id: Int
   name: String
   stages: [UpdateStageInput]
+  users: [ID]
 }
 
 input CreateStageInput {
@@ -46,9 +47,4 @@ input UpdateStageInput {
   id: Int
   name: String!
   order: Int!
-}
-
-input AddUserToProjectInput {
-  userId: Int!
-  projectId: Int!
 }

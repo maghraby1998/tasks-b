@@ -38,23 +38,21 @@ export class ProjectResolver {
 
   @Mutation('upsertProject')
   async upsertProject(@Args('input') input: any, @Auth() auth: User) {
-    return this.projectService.createProject(auth, input?.name, input?.stages);
+    return this.projectService.createProject(
+      auth,
+      input?.name,
+      input?.stages,
+      input?.users,
+    );
   }
 
   @Mutation('updateProject')
   async updateProject(@Args('input') input: any, @Auth() auth: User) {
     return this.projectService.updateProject(
-      auth,
       input?.id,
       input?.name,
       input?.stages,
+      input?.users,
     );
-  }
-
-  @Mutation('addUserToProject')
-  async addUserToProject(
-    @Args('input') input: { userId: number; projectId: number },
-  ) {
-    return this.projectService.addUserToProject(input.userId, input.projectId);
   }
 }

@@ -50,4 +50,11 @@ export class TaskResolver {
   async updateTaskStage(@Args('input') input: any) {
     return this.taskService.updateTaskStage(input?.taskId, input?.stageId);
   }
+
+  @Mutation()
+  async updateTask(
+    @Args('input') input: { id: number; name: string; taskUsers: number[] },
+  ) {
+    return this.taskService.updateTask(+input.id, input.name, input.taskUsers);
+  }
 }

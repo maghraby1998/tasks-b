@@ -12,9 +12,12 @@ import { ProjectModule } from './project/project.module';
 import { AuthMiddleware } from './middlewares/auth.middleware';
 import { PrismaService } from './prisma.service';
 import { JwtModule } from '@nestjs/jwt';
+import { InvitationModule } from './invitation/invitation.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     UserModule,
     TaskModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -35,6 +38,7 @@ import { JwtModule } from '@nestjs/jwt';
     }),
     AuthModule,
     ProjectModule,
+    InvitationModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

@@ -1,0 +1,24 @@
+type Invitation {
+  id: Int
+  sender: User
+  receiver: User
+  project: Project
+  status: String
+}
+
+type Query {
+  sentInvitations: [Invitation]
+  receivedInvitations: [Invitation]
+}
+
+type Mutation {
+  inviteUserToProject(input: InviteUserToProjectInput): Project
+  acceptInvitation(invitationId: Int): Invitation
+  rejectInvitation(invitationId: Int): Invitation
+  cancelInvitation(invitationId: Int): Invitation
+}
+
+input InviteUserToProjectInput {
+  email: String!
+  projectId: Int!
+}
