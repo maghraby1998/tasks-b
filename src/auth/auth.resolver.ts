@@ -16,4 +16,11 @@ export class AuthResolver {
   signIn(@Args('input') input: { email: string; password: string }) {
     return this.authService.signIn(input.email, input.password);
   }
+
+  @Mutation()
+  signUp(
+    @Args('input') input: { name: string; email: string; password: string },
+  ) {
+    return this.authService.signUp(input.name, input.email, input.password);
+  }
 }

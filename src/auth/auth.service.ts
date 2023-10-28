@@ -13,6 +13,12 @@ export class AuthService {
   ) {}
 
   async signUp(name: string, email: string, password: string) {
+    const user = await this.userService.findUserByEmail(email);
+
+    if (!!user) {
+      throw new BadRequestException('email already exists');
+    }
+
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     return this.prisma.user.create({

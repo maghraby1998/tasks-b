@@ -1,14 +1,19 @@
 import {
   Args,
+  Context,
   Mutation,
   Parent,
   Query,
   ResolveField,
   Resolver,
+  Subscription,
 } from '@nestjs/graphql';
 import { InvitationService } from './invitation.service';
 import { Auth } from 'src/decorators/auth.decorator';
 import { User, ProjectInvitations } from '@prisma/client';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = new PubSub();
 
 @Resolver('Invitation')
 export class InvitationResolver {
@@ -16,6 +21,10 @@ export class InvitationResolver {
 
   @Query('sentInvitations')
   async sentInvitations(@Auth() auth: User) {
+    pubSub.publish('invitationAccepted', {
+      invitationAccepted: 'random string to be published',
+    });
+
     return this.invitationService.getSentInvitations(auth.id);
   }
 
@@ -64,5 +73,10 @@ export class InvitationResolver {
   @Mutation('cancelInvitation')
   async cancelInvitation(@Args('invitationId') invitationId: number) {
     return this.invitationService.cancelInvitation(invitationId);
+  }
+
+  @Subscription('invitationAccepted')
+  invitationAccepted() {
+    return pubSub.asyncIterator('invitationAccepted');
   }
 }

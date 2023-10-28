@@ -36,6 +36,12 @@ export class SignInInput {
     password?: Nullable<string>;
 }
 
+export class SignUpInput {
+    email?: Nullable<string>;
+    name?: Nullable<string>;
+    password?: Nullable<string>;
+}
+
 export class UpdateProjectInput {
     id?: Nullable<number>;
     name?: Nullable<string>;
@@ -89,6 +95,8 @@ export abstract class IMutation {
 
     abstract signIn(input?: Nullable<SignInInput>): Nullable<SignIn> | Promise<Nullable<SignIn>>;
 
+    abstract signUp(input?: Nullable<SignUpInput>): Nullable<User> | Promise<Nullable<User>>;
+
     abstract updateProject(input?: Nullable<UpdateProjectInput>): Nullable<Project> | Promise<Nullable<Project>>;
 
     abstract updateTask(input?: Nullable<UpdateTaskInput>): Nullable<Task> | Promise<Nullable<Task>>;
@@ -134,6 +142,10 @@ export class Stage {
     order: number;
     project?: Nullable<Project>;
     tasks?: Nullable<Nullable<Task>[]>;
+}
+
+export abstract class ISubscription {
+    abstract invitationAccepted(): Nullable<string> | Promise<Nullable<string>>;
 }
 
 export class Task {

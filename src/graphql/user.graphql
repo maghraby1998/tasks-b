@@ -5,6 +5,7 @@ type Query {
 type Mutation {
   createUser(input: CreateUserInput): User
   signIn(input: SignInInput): SignIn
+  signUp(input: SignUpInput): User
 }
 
 type SignIn {
@@ -20,6 +21,12 @@ type User {
 }
 
 input SignInInput {
+  email: String
+  password: String
+}
+
+input SignUpInput {
+  name: String
   email: String
   password: String
 }
