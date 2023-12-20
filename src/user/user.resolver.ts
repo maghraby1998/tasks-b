@@ -9,7 +9,6 @@ import {
 import { UserService } from './user.service';
 import { ParseIntPipe } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { CreateUserInputDto } from './dtos/create-user.dto';
 import { AuthService } from 'src/auth/auth.service';
 
 @Resolver('User')

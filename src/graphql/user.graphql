@@ -3,7 +3,6 @@ type Query {
 }
 
 type Mutation {
-  createUser(input: CreateUserInput): User
   signIn(input: SignInInput): SignIn
   signUp(input: SignUpInput): User
 }
@@ -26,13 +25,7 @@ input SignInInput {
 }
 
 input SignUpInput {
-  name: String
-  email: String
-  password: String
-}
-
-input CreateUserInput {
-  name: String
-  email: String
-  password: String
+  name: String!
+  email: String!
+  password: String!
 }

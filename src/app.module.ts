@@ -14,6 +14,9 @@ import { PrismaService } from './prisma.service';
 import { JwtModule } from '@nestjs/jwt';
 import { InvitationModule } from './invitation/invitation.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { GraphQLError, GraphQLFormattedError } from 'graphql';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 
 @Module({
   imports: [
@@ -38,6 +41,25 @@ import { ScheduleModule } from '@nestjs/schedule';
       global: true,
       secret: 'randomsecretkeyfornowishouldchangeitforlater',
       signOptions: { expiresIn: '1000s' },
+    }),
+    MailerModule.forRoot({
+      transport: {
+        service: 'gmail',
+        auth: {
+          user: 'maghraby1998@gmail.com',
+          pass: 'cbne winl axoc okoc',
+        },
+      },
+      defaults: {
+        from: 'maghraby1998@gmail.com',
+      },
+      template: {
+        dir: __dirname + '/templates',
+        adapter: new EjsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
     }),
     AuthModule,
     ProjectModule,

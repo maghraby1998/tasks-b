@@ -42,6 +42,7 @@ model User {
   name               String
   password           String
   email              String               @unique
+  email_verified     Int                  @default(0)
   tasks              UserTask[]
   projects           ProjectUser[]
   invitationsSent    ProjectInvitations[] @relation(name: "sender")

@@ -20,12 +20,6 @@ export class CreateTaskInput {
     usersIds?: Nullable<Nullable<string>[]>;
 }
 
-export class CreateUserInput {
-    email?: Nullable<string>;
-    name?: Nullable<string>;
-    password?: Nullable<string>;
-}
-
 export class InviteUserToProjectInput {
     email: string;
     projectId: number;
@@ -37,9 +31,9 @@ export class SignInInput {
 }
 
 export class SignUpInput {
-    email?: Nullable<string>;
-    name?: Nullable<string>;
-    password?: Nullable<string>;
+    email: string;
+    name: string;
+    password: string;
 }
 
 export class UpdateProjectInput {
@@ -86,8 +80,6 @@ export abstract class IMutation {
     abstract cancelInvitation(invitationId?: Nullable<number>): Nullable<Invitation> | Promise<Nullable<Invitation>>;
 
     abstract createTask(input?: Nullable<CreateTaskInput>): Nullable<Task> | Promise<Nullable<Task>>;
-
-    abstract createUser(input?: Nullable<CreateUserInput>): Nullable<User> | Promise<Nullable<User>>;
 
     abstract inviteUserToProject(input?: Nullable<InviteUserToProjectInput>): Nullable<Project> | Promise<Nullable<Project>>;
 

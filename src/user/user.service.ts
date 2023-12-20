@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import * as bcrypt from 'bcrypt';
-import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class UserService {
