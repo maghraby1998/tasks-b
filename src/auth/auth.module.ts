@@ -11,7 +11,7 @@ import { PrismaService } from 'src/prisma.service';
     JwtModule.register({
       global: true,
       secret: 'randomjwtsecretkeyshouldtakethistoenv',
-      signOptions: { expiresIn: '60s' },
+      // signOptions: { expiresIn: '60s' },
     }),
   ],
   providers: [AuthService, AuthResolver, PrismaService],

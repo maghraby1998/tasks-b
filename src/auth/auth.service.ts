@@ -83,7 +83,7 @@ export class AuthService {
       throw new BadRequestException('your email is not verified');
     }
 
-    const payload = { userId: user.id };
+    const payload = { id: user.id };
 
     const access_token = await this.jwtService.signAsync(payload);
 

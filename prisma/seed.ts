@@ -13,18 +13,21 @@ async function main() {
         name: 'user1',
         email: 'ahmed@gmail.com',
         password: hashedPassword,
+        email_verified: 1,
       },
       {
         id: 2,
         name: 'user2',
         email: 'ahmed1@gmail.com',
         password: hashedPassword,
+        email_verified: 1,
       },
       {
         id: 3,
         name: 'user3',
         email: 'ahmed2@gmail.com',
         password: hashedPassword,
+        email_verified: 1,
       },
     ],
   });
