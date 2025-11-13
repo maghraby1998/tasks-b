@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { UserInputError } from '@nestjs/apollo';
+import { BugsnagGraphqlExceptionFilter } from './filters/bugsnag-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +22,8 @@ async function bootstrap() {
       },
     }),
   );
+  app.useGlobalFilters(new BugsnagGraphqlExceptionFilter());
+
   app.enableCors();
   await app.listen(5000);
 }

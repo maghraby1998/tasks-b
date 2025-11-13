@@ -2,6 +2,7 @@ import { Controller, Get, Param, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
 import { Response } from 'express';
+import { Public } from './decorators/public.decorator';
 
 @Controller()
 export class AppController {
@@ -9,6 +10,12 @@ export class AppController {
     private readonly appService: AppService,
     private authService: AuthService,
   ) {}
+
+  @Public()
+  @Get('/')
+  async test() {
+    return 'test another thing';
+  }
 
   @Get('/verify-email/:email')
   async verifyEmail(
