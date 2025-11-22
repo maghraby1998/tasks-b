@@ -7,15 +7,18 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { TaskService } from './task.service';
-import { CreateTaskInput, Task } from 'src/graphql';
 import { ParseIntPipe } from '@nestjs/common';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { Auth } from 'src/decorators/auth.decorator';
-import { User } from '@prisma/client';
+import { Task, User } from '@prisma/client';
+import { ProjectService } from 'src/project/project.service';
 
 @Resolver('Task')
 export class TaskResolver {
-  constructor(private taskService: TaskService) {}
+  constructor(
+    private taskService: TaskService,
+    private projectService: ProjectService,
+  ) {}
 
   @Query('tasks')
   async tasks(@Args('user_ids') user_ids: number[]) {
@@ -34,6 +37,11 @@ export class TaskResolver {
   @ResolveField()
   async users(@Parent() task: Task) {
     return this.taskService.getTaskUsers(task.id);
+  }
+
+  @ResolveField()
+  async project(@Parent() task: Task) {
+    return this.projectService.findOne(task.projectId);
   }
 
   @Mutation()

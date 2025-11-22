@@ -34,9 +34,7 @@ import { AuthGuard } from './guards/auth.guard';
         path: join(process.cwd(), 'src/graphql.ts'),
         outputAs: 'class',
       },
-      sortSchema: true,
-      playground: false,
-      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      graphiql: true,
     }),
     JwtModule.register({
       global: true,
