@@ -130,18 +130,15 @@ export class ProjectService {
   }
 
   async findProjectUsers(projectId: number) {
-    const projectUsers = await this.prisma.projectUser.findMany({
+    return this.prisma.user.findMany({
       where: {
-        projectId,
-      },
-      include: {
-        user: true,
+        projects: {
+          some: {
+            projectId,
+          },
+        },
       },
     });
-
-    const users = projectUsers.map((projectUser) => projectUser.user);
-
-    return users;
   }
 
   async findOne(id: number) {
