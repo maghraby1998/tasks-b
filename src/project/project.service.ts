@@ -7,18 +7,16 @@ export class ProjectService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(auth: User) {
-    const projectUser = await this.prisma.projectUser.findMany({
+    const user = await this.prisma.user.findUnique({
       where: {
-        userId: auth.id,
+        id: auth.id,
       },
       include: {
-        project: true,
+        projects: true,
       },
     });
 
-    const projects = projectUser.map((projectUser) => projectUser.project);
-
-    return projects;
+    return user.projects;
   }
 
   async createProject(
@@ -28,17 +26,10 @@ export class ProjectService {
     users: number[] = [],
   ) {
     const project = await this.prisma.project.create({
-      data: { name, created_at: new Date() },
-    });
-
-    await this.prisma.projectUser.create({
       data: {
-        project: {
-          connect: {
-            id: project.id,
-          },
-        },
-        user: {
+        name,
+        created_at: new Date(),
+        users: {
           connect: {
             id: auth.id,
           },
@@ -51,22 +42,19 @@ export class ProjectService {
         ...stage,
         projectId: project.id,
       }));
-
       await this.prisma.stage.createMany({
         data: stagesToStore,
       });
     }
-
-    if (users.length) {
-      const userProjectData = users.map((id) => ({
-        userId: id,
-        projectId: project.id,
-      }));
-      await this.prisma.projectUser.createMany({
-        data: userProjectData,
-      });
-    }
-
+    // if (users.length) {
+    //   const userProjectData = users.map((id) => ({
+    //     userId: id,
+    //     projectId: project.id,
+    //   }));
+    //   await this.prisma.projectUser.createMany({
+    //     data: userProjectData,
+    //   });
+    // }
     return project;
   }
 
@@ -134,7 +122,7 @@ export class ProjectService {
       where: {
         projects: {
           some: {
-            projectId,
+            id: projectId,
           },
         },
       },

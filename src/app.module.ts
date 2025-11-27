@@ -18,9 +18,13 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { AuthGuard } from './guards/auth.guard';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
+    PrometheusModule.register({
+      path: '/mymetrics',
+    }),
     ScheduleModule.forRoot(),
     UserModule,
     TaskModule,

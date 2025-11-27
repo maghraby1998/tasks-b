@@ -34,6 +34,10 @@ export class AuthGuard implements CanActivate {
 
     const request = gqlContext.getContext().req;
 
+    if (request.path == '/mymetrics') {
+      return true;
+    }
+
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();

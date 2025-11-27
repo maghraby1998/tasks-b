@@ -5,7 +5,10 @@ import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class InvitationService {
-  constructor(private prisma: PrismaClient, private userService: UserService) {}
+  constructor(
+    private prisma: PrismaClient,
+    private userService: UserService,
+  ) {}
 
   async getSentInvitations(userId: number) {
     const invitations = await this.prisma.projectInvitations.findMany({
@@ -51,11 +54,11 @@ export class InvitationService {
     }
 
     // check if user already exists in the project
-    const projectUser = await this.prisma.projectUser.findMany({
-      where: { projectId, userId: user.id },
+    const projectUser = await this.prisma.project.findFirst({
+      where: { id: projectId, users: { some: { id: user.id } } },
     });
 
-    if (projectUser.length) {
+    if (projectUser) {
       throw new BadRequestException('user already exists in this project');
     }
 
@@ -150,20 +153,26 @@ export class InvitationService {
   }
 
   async addUserToProject(userId: number, projectId: number) {
-    const projectUser = await this.prisma.projectUser.findFirst({
+    const projectUser = await this.prisma.project.findFirst({
       where: {
-        userId,
-        projectId,
+        id: projectId,
+        users: { some: { id: userId } },
       },
     });
 
     if (projectUser) {
       throw new BadRequestException('user already belongs to that project');
     } else {
-      await this.prisma.projectUser.create({
+      await this.prisma.project.update({
+        where: {
+          id: projectId,
+        },
         data: {
-          userId,
-          projectId,
+          users: {
+            connect: {
+              id: userId,
+            },
+          },
         },
       });
       return await this.prisma.project.findUnique({

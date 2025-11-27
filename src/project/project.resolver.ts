@@ -33,7 +33,6 @@ export class ProjectResolver {
 
   @ResolveField()
   async users(@Parent() project: Project) {
-    console.log('project.id', project.id);
     return this.projectService.findProjectUsers(project.id);
   }
 
