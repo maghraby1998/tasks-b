@@ -1,5 +1,4 @@
 type Query {
-  tasks(user_ids: [ID]): [Task]
   task(id: ID!): Task
 }
 
@@ -13,8 +12,10 @@ type Task {
   id: Int!
   name: String
   created_at: String
-  users: [User]
+  assignees: [User]
   project: Project
+  createdBy: User
+  description: String
 }
 
 input CreateTaskInput {
@@ -22,6 +23,7 @@ input CreateTaskInput {
   projectId: ID
   stageId: ID
   usersIds: [ID]
+  description: String
 }
 
 input UpdateTaskInput {

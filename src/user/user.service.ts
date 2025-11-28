@@ -24,14 +24,11 @@ export class UserService {
   }
 
   getUserTasks(id: number) {
-    return this.prisma.userTask.findMany({
-      where: { userId: id },
-      include: {
-        task: {
-          include: {
-            users: {
-              include: { user: true },
-            },
+    return this.prisma.task.findMany({
+      where: {
+        assignees: {
+          some: {
+            id,
           },
         },
       },

@@ -42,6 +42,7 @@ export class CreateTaskInput {
     projectId?: Nullable<string>;
     stageId?: Nullable<string>;
     usersIds?: Nullable<Nullable<string>[]>;
+    description?: Nullable<string>;
 }
 
 export class UpdateTaskInput {
@@ -82,8 +83,6 @@ export abstract class IQuery {
     abstract project(id: string): Nullable<Project> | Promise<Nullable<Project>>;
 
     abstract projects(): Nullable<Nullable<Project>[]> | Promise<Nullable<Nullable<Project>[]>>;
-
-    abstract tasks(user_ids?: Nullable<Nullable<string>[]>): Nullable<Nullable<Task>[]> | Promise<Nullable<Nullable<Task>[]>>;
 
     abstract task(id: string): Nullable<Task> | Promise<Nullable<Task>>;
 
@@ -139,8 +138,10 @@ export class Task {
     id: number;
     name?: Nullable<string>;
     created_at?: Nullable<string>;
-    users?: Nullable<Nullable<User>[]>;
+    assignees?: Nullable<Nullable<User>[]>;
     project?: Nullable<Project>;
+    createdBy?: Nullable<User>;
+    description?: Nullable<string>;
 }
 
 export class SignIn {

@@ -48,33 +48,13 @@ async function main() {
     ],
   });
 
-  const tasks = await prisma.task.createMany({
-    data: [
-      { name: 'task 1', created_at: date, projectId: 1, stageId: 1 },
-      { name: 'task 2', created_at: date, projectId: 1, stageId: 1 },
-      { name: 'task 3', created_at: date, projectId: 1, stageId: 1 },
-    ],
-  });
-
-  const userTasks = await prisma.userTask.createMany({
-    data: [
-      {
-        id: 1,
-        userId: 1,
-        taskId: 1,
-      },
-      {
-        id: 2,
-        userId: 2,
-        taskId: 2,
-      },
-      {
-        id: 3,
-        userId: 3,
-        taskId: 3,
-      },
-    ],
-  });
+  // const tasks = await prisma.task.createMany({
+  //   data: [
+  //     { name: 'task 1', created_at: date, projectId: 1, stageId: 1 },
+  //     { name: 'task 2', created_at: date, projectId: 1, stageId: 1 },
+  //     { name: 'task 3', created_at: date, projectId: 1, stageId: 1 },
+  //   ],
+  // });
 }
 
 main()

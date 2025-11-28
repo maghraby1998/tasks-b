@@ -12,21 +12,15 @@ import { CreateTaskDto } from './dtos/create-task.dto';
 import { Auth } from 'src/decorators/auth.decorator';
 import { Task, User } from '@prisma/client';
 import { ProjectService } from 'src/project/project.service';
+import { UserService } from 'src/user/user.service';
 
 @Resolver('Task')
 export class TaskResolver {
   constructor(
     private taskService: TaskService,
     private projectService: ProjectService,
+    private userService: UserService,
   ) {}
-
-  @Query('tasks')
-  async tasks(@Args('user_ids') user_ids: number[]) {
-    const tasks = await this.taskService.findAllTasks(
-      user_ids?.map((id) => +id),
-    );
-    return tasks;
-  }
 
   @Query('task')
   async task(@Args('id', ParseIntPipe) id: number) {
@@ -35,8 +29,13 @@ export class TaskResolver {
   }
 
   @ResolveField()
-  async users(@Parent() task: Task) {
+  async assignees(@Parent() task: Task) {
     return this.taskService.getTaskUsers(task.id);
+  }
+
+  @ResolveField()
+  async createdBy(@Parent() task: Task) {
+    return this.userService.findOne(task.created_by);
   }
 
   @ResolveField()
@@ -45,13 +44,8 @@ export class TaskResolver {
   }
 
   @Mutation()
-  async createTask(@Args('input') input: CreateTaskDto) {
-    return this.taskService.createTask(
-      input.name,
-      input.projectId,
-      input.stageId,
-      input.usersIds,
-    );
+  async createTask(@Args('input') input: CreateTaskDto, @Auth() auth: User) {
+    return this.taskService.createTask(input, auth);
   }
 
   @Mutation()

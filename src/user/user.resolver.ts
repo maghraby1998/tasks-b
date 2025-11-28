@@ -22,7 +22,6 @@ export class UserResolver {
 
   @ResolveField()
   async tasks(@Parent() user: User) {
-    const userTasks = await this.userService.getUserTasks(user.id);
-    return userTasks.map((userTask) => userTask.task);
+    return this.userService.getUserTasks(user.id);
   }
 }

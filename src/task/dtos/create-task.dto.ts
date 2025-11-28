@@ -12,4 +12,7 @@ export class CreateTaskDto {
 
   @IsArray()
   usersIds: number[];
+
+  @IsString()
+  description: string;
 }

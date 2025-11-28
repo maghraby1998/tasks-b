@@ -35,29 +35,25 @@ model User {
   password           String
   email              String               @unique
   email_verified     Int                  @default(0)
-  tasks              UserTask[]
+  tasks              Task[]               @relation("TaskAssignees")
   projects           Project[]            @relation("UserProjects")
   invitationsSent    ProjectInvitations[] @relation(name: "sender")
   InvitationReceived ProjectInvitations[] @relation(name: "receiver")
+  createdTasks       Task[]               @relation("TaskCreator")
 }
 
 model Task {
-  id         Int        @id @default(autoincrement())
-  name       String
-  created_at DateTime
-  users      UserTask[]
-  projectId  Int
-  project    Project    @relation(fields: [projectId], references: [id])
-  stageId    Int
-  stage      Stage      @relation(fields: [stageId], references: [id])
-}
-
-model UserTask {
-  id     Int  @id @default(autoincrement())
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
-  taskId Int
-  task   Task @relation(fields: [taskId], references: [id])
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  created_at  DateTime
+  assignees   User[]   @relation("TaskAssignees")
+  projectId   Int
+  project     Project  @relation(fields: [projectId], references: [id])
+  stageId     Int
+  stage       Stage    @relation(fields: [stageId], references: [id])
+  created_by  Int
+  creator     User     @relation("TaskCreator", fields: [created_by], references: [id])
 }
 
 model ProjectInvitations {

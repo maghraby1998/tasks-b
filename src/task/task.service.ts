@@ -1,20 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
+import { CreateTaskDto } from './dtos/create-task.dto';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class TaskService {
   constructor(private prisma: PrismaService) {}
-
-  async findAllTasks(user_ids: number[]) {
-    const userTasks = await this.prisma.userTask.findMany({
-      where: { userId: { in: user_ids } },
-      include: {
-        task: true,
-      },
-    });
-
-    return userTasks.map((userTask) => userTask.task);
-  }
 
   async findTask(id: number) {
     return this.prisma.task.findUnique({
@@ -25,55 +16,41 @@ export class TaskService {
   }
 
   async getTaskUsers(taskId: number) {
-    const userTasks = await this.prisma.userTask.findMany({
-      where: { taskId },
-      include: {
-        user: {
-          include: {
-            tasks: {
-              include: {
-                task: true,
-              },
-            },
+    return this.prisma.user.findMany({
+      where: {
+        tasks: {
+          some: {
+            id: taskId,
           },
         },
       },
     });
-
-    return userTasks.map((userTask) => userTask.user);
   }
 
-  async createTask(
-    name: string,
-    projectId: number,
-    stageId: number,
-    userIds: number[] = [],
-  ) {
+  async createTask(createTaskInput: CreateTaskDto, auth: User) {
     const task = await this.prisma.task.create({
       data: {
-        name,
+        name: createTaskInput.name,
         project: {
-          connect: { id: +projectId },
+          connect: { id: +createTaskInput.projectId },
         },
         stage: {
           connect: {
-            id: +stageId,
+            id: +createTaskInput.stageId,
           },
         },
         created_at: new Date(),
+        assignees: {
+          connect: createTaskInput?.usersIds?.map((id) => ({ id: +id })),
+        },
+        creator: {
+          connect: {
+            id: auth?.id,
+          },
+        },
+        description: createTaskInput.description,
       },
     });
-
-    if (userIds.length) {
-      const userTaskData = userIds?.map((userId: number) => ({
-        userId,
-        taskId: task.id,
-      }));
-
-      await this.prisma.userTask.createMany({
-        data: userTaskData,
-      });
-    }
 
     return task;
   }
