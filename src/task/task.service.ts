@@ -70,4 +70,13 @@ export class TaskService {
       },
     });
   }
+
+  async changeTaskName(id: number, name: string) {
+    return this.prisma.task.update({
+      where: { id },
+      data: {
+        name,
+      },
+    });
+  }
 }

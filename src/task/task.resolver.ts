@@ -54,6 +54,11 @@ export class TaskResolver {
   }
 
   @Mutation()
+  async changeTaskName(@Args('id') id: number, @Args('name') name: string) {
+    return this.taskService.changeTaskName(id, name);
+  }
+
+  @Mutation()
   async updateTask(
     @Args('input') input: { id: number; name: string; taskUsers: number[] },
   ) {
