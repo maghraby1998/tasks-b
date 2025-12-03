@@ -7,6 +7,7 @@ type Mutation {
   updateTask(input: UpdateTaskInput): Task
   updateTaskStage(input: UpdateTaskStageInput): Task
   changeTaskName(id: ID!, name: String!): Task
+  changeTaskDescription(id: ID!, description: String!): Task
 }
 
 type Task {

@@ -31,7 +31,7 @@ export class ProjectService {
       },
     });
 
-    if (!!projectNameExists.name) {
+    if (!!projectNameExists) {
       throw new BadRequestException('Project name already exists');
     }
 

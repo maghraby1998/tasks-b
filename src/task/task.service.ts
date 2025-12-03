@@ -79,4 +79,13 @@ export class TaskService {
       },
     });
   }
+
+  async changeTaskDescription(id: number, description: string) {
+    return this.prisma.task.update({
+      where: { id },
+      data: {
+        description,
+      },
+    });
+  }
 }

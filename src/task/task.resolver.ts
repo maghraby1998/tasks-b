@@ -54,8 +54,19 @@ export class TaskResolver {
   }
 
   @Mutation()
-  async changeTaskName(@Args('id') id: number, @Args('name') name: string) {
+  async changeTaskName(
+    @Args('id', ParseIntPipe) id: number,
+    @Args('name') name: string,
+  ) {
     return this.taskService.changeTaskName(id, name);
+  }
+
+  @Mutation()
+  async changeTaskDescription(
+    @Args('id', ParseIntPipe) id: number,
+    @Args('description') description: string,
+  ) {
+    return this.taskService.changeTaskDescription(id, description);
   }
 
   @Mutation()
