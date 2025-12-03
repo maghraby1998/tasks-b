@@ -25,6 +25,16 @@ export class ProjectService {
     stages: Stage[] = [],
     users: number[] = [],
   ) {
+    const projectNameExists = await this.prisma.project.findFirst({
+      where: {
+        name,
+      },
+    });
+
+    if (!!projectNameExists.name) {
+      throw new BadRequestException('Project name already exists');
+    }
+
     const project = await this.prisma.project.create({
       data: {
         name,
