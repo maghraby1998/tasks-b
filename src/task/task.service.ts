@@ -88,4 +88,15 @@ export class TaskService {
       },
     });
   }
+
+  async changeTaskStage(id: number, stageId: number) {
+    return this.prisma.task.update({
+      where: {
+        id,
+      },
+      data: {
+        stageId,
+      },
+    });
+  }
 }

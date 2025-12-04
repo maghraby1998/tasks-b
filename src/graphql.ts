@@ -112,6 +112,8 @@ export abstract class IMutation {
 
     abstract changeTaskDescription(id: string, description: string): Nullable<Task> | Promise<Nullable<Task>>;
 
+    abstract changeTaskStage(id: string, stageId: string): Nullable<Task> | Promise<Nullable<Task>>;
+
     abstract signIn(input?: Nullable<SignInInput>): Nullable<SignIn> | Promise<Nullable<SignIn>>;
 
     abstract signUp(input?: Nullable<SignUpInput>): Nullable<User> | Promise<Nullable<User>>;
@@ -144,6 +146,7 @@ export class Task {
     created_at?: Nullable<string>;
     assignees?: Nullable<Nullable<User>[]>;
     project?: Nullable<Project>;
+    stage?: Nullable<Stage>;
     createdBy?: Nullable<User>;
     description?: Nullable<string>;
 }

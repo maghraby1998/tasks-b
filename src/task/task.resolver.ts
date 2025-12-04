@@ -13,6 +13,7 @@ import { Auth } from 'src/decorators/auth.decorator';
 import { Task, User } from '@prisma/client';
 import { ProjectService } from 'src/project/project.service';
 import { UserService } from 'src/user/user.service';
+import { PrismaService } from 'src/prisma.service';
 
 @Resolver('Task')
 export class TaskResolver {
@@ -20,6 +21,7 @@ export class TaskResolver {
     private taskService: TaskService,
     private projectService: ProjectService,
     private userService: UserService,
+    private prisma: PrismaService,
   ) {}
 
   @Query('task')
@@ -41,6 +43,15 @@ export class TaskResolver {
   @ResolveField()
   async project(@Parent() task: Task) {
     return this.projectService.findOne(task.projectId);
+  }
+
+  @ResolveField()
+  async stage(@Parent() task: Task) {
+    return this.prisma.stage.findUnique({
+      where: {
+        id: task?.stageId,
+      },
+    });
   }
 
   @Mutation()
@@ -74,5 +85,13 @@ export class TaskResolver {
     @Args('input') input: { id: number; name: string; taskUsers: number[] },
   ) {
     return this.taskService.updateTask(+input.id, input.name, input.taskUsers);
+  }
+
+  @Mutation()
+  async changeTaskStage(
+    @Args('id', ParseIntPipe) id: number,
+    @Args('stageId', ParseIntPipe) stageId: number,
+  ) {
+    return this.taskService.changeTaskStage(id, stageId);
   }
 }
