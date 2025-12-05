@@ -29,7 +29,6 @@ export class ProjectService {
     if (!!projectNameExists) {
       throw new BadRequestException('Project name already exists');
     }
-    console.log('heree1');
 
     return this.prisma.project.create({
       data: {
