@@ -23,6 +23,7 @@ type Stage {
   order: Int!
   project: Project
   tasks: [Task]
+  color: String
 }
 
 input UpsertProjectInput {
@@ -41,10 +42,12 @@ input UpdateProjectInput {
 input CreateStageInput {
   name: String!
   order: Int!
+  color: String
 }
 
 input UpdateStageInput {
   id: Int
   name: String!
   order: Int!
+  color: String
 }

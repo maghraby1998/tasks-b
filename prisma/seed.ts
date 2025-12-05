@@ -32,21 +32,21 @@ async function main() {
     ],
   });
 
-  const projects = await prisma.project.createMany({
-    data: [
-      { id: 1, name: 'project 1', created_at: new Date() },
-      { id: 2, name: 'project 2', created_at: new Date() },
-      { id: 3, name: 'project 3', created_at: new Date() },
-    ],
-  });
+  // const projects = await prisma.project.createMany({
+  //   data: [
+  //     { id: 1, name: 'project 1', created_at: new Date() },
+  //     { id: 2, name: 'project 2', created_at: new Date() },
+  //     { id: 3, name: 'project 3', created_at: new Date() },
+  //   ],
+  // });
 
-  const stages = await prisma.stage.createMany({
-    data: [
-      { id: 1, name: 'stage 1', projectId: 1, order: 1 },
-      { id: 2, name: 'stage 2', projectId: 1, order: 2 },
-      { id: 3, name: 'stage 3', projectId: 1, order: 3 },
-    ],
-  });
+  // const stages = await prisma.stage.createMany({
+  //   data: [
+  //     { id: 1, name: 'stage 1', projectId: 1, order: 1 },
+  //     { id: 2, name: 'stage 2', projectId: 1, order: 2 },
+  //     { id: 3, name: 'stage 3', projectId: 1, order: 3 },
+  //   ],
+  // });
 
   // const tasks = await prisma.task.createMany({
   //   data: [

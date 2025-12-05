@@ -38,12 +38,7 @@ export class ProjectResolver {
 
   @Mutation('upsertProject')
   async upsertProject(@Args('input') input: any, @Auth() auth: User) {
-    return this.projectService.createProject(
-      auth,
-      input?.name,
-      input?.stages,
-      input?.users,
-    );
+    return this.projectService.createProject(auth, input?.name, input?.stages);
   }
 
   @Mutation('updateProject')
@@ -52,7 +47,6 @@ export class ProjectResolver {
       input?.id,
       input?.name,
       input?.stages,
-      input?.users,
     );
   }
 }

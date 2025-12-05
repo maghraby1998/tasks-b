@@ -29,12 +29,14 @@ export class UpdateProjectInput {
 export class CreateStageInput {
     name: string;
     order: number;
+    color?: Nullable<string>;
 }
 
 export class UpdateStageInput {
     id?: Nullable<number>;
     name: string;
     order: number;
+    color?: Nullable<string>;
 }
 
 export class CreateTaskInput {
@@ -138,6 +140,7 @@ export class Stage {
     order: number;
     project?: Nullable<Project>;
     tasks?: Nullable<Nullable<Task>[]>;
+    color?: Nullable<string>;
 }
 
 export class Task {
