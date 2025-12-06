@@ -47,36 +47,58 @@ export class ProjectService {
   }
 
   async updateProject(projectId: number, name: string, stages: Stage[] = []) {
-    const projectNameExists = await this.prisma.project.findFirst({
-      where: {
-        name,
-      },
-    });
+    return await this.prisma.$transaction(async (tx) => {
+      const projectNameExists = await tx.project.findFirst({
+        where: { name },
+      });
 
-    if (!!projectNameExists) {
-      throw new BadRequestException('Project name already exists');
-    }
+      if (projectNameExists) {
+        throw new BadRequestException('Project name already exists');
+      }
 
-    return this.prisma.project.update({
-      where: { id: projectId },
-      data: {
-        name,
-        stages: {
-          upsert: stages.map((stage) => ({
-            where: { id: stage.id || 0 },
-            update: {
-              name: stage.name,
-              order: stage.order,
-              color: stage.color,
+      const projectStages = await tx.stage.findMany({
+        where: { projectId },
+      });
+
+      const stageIdsFromClient = stages
+        .map((st) => Number(st.id))
+        .filter(Boolean);
+
+      const projectStagesToDelete = projectStages?.filter(
+        (stage) => !stageIdsFromClient?.includes(stage?.id),
+      );
+
+      if (projectStagesToDelete?.length > 0) {
+        await tx.stage.deleteMany({
+          where: {
+            id: {
+              in: projectStagesToDelete?.map((stage) => stage?.id),
             },
-            create: {
-              name: stage.name,
-              order: stage.order,
-              color: stage.color,
-            },
-          })),
+          },
+        });
+      }
+
+      return await tx.project.update({
+        where: { id: projectId },
+        data: {
+          name,
+          stages: {
+            upsert: stages.map((stage) => ({
+              where: { id: stage?.id ?? 0 },
+              create: {
+                name: stage.name,
+                color: stage.color,
+                order: stage.order,
+              },
+              update: {
+                name: stage.name,
+                color: stage.color,
+                order: stage.order,
+              },
+            })),
+          },
         },
-      },
+      });
     });
   }
 
