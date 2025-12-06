@@ -120,6 +120,8 @@ export abstract class IMutation {
 
     abstract unAssignUserFromTask(taskId: string, userId: string): Nullable<Task> | Promise<Nullable<Task>>;
 
+    abstract deleteTask(id: string): Nullable<Task> | Promise<Nullable<Task>>;
+
     abstract signIn(input?: Nullable<SignInInput>): Nullable<SignIn> | Promise<Nullable<SignIn>>;
 
     abstract signUp(input?: Nullable<SignUpInput>): Nullable<User> | Promise<Nullable<User>>;

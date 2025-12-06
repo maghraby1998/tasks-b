@@ -110,4 +110,9 @@ export class TaskResolver {
   ) {
     return this.taskService.unAssignUserFromTask(taskId, userId);
   }
+
+  @Mutation()
+  async deleteTask(@Args('id', ParseIntPipe) id: number) {
+    return this.taskService.deleteTask(id);
+  }
 }

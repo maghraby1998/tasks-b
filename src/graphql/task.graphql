@@ -11,6 +11,7 @@ type Mutation {
   changeTaskStage(id: ID!, stageId: ID!): Task
   assignUserToTask(taskId: ID!, userId: ID!): Task
   unAssignUserFromTask(taskId: ID!, userId: ID!): Task
+  deleteTask(id: ID!): Task
 }
 
 type Task {
