@@ -9,6 +9,8 @@ type Mutation {
   changeTaskName(id: ID!, name: String!): Task
   changeTaskDescription(id: ID!, description: String!): Task
   changeTaskStage(id: ID!, stageId: ID!): Task
+  assignUserToTask(taskId: ID!, userId: ID!): Task
+  unAssignUserFromTask(taskId: ID!, userId: ID!): Task
 }
 
 type Task {

@@ -99,4 +99,34 @@ export class TaskService {
       },
     });
   }
+
+  async assignUserToTask(taskId: number, userId: number) {
+    return this.prisma.task.update({
+      where: {
+        id: taskId,
+      },
+      data: {
+        assignees: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    });
+  }
+
+  async unAssignUserFromTask(taskId: number, userId: number) {
+    return this.prisma.task.update({
+      where: {
+        id: taskId,
+      },
+      data: {
+        assignees: {
+          disconnect: {
+            id: userId,
+          },
+        },
+      },
+    });
+  }
 }

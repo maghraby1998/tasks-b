@@ -94,4 +94,20 @@ export class TaskResolver {
   ) {
     return this.taskService.changeTaskStage(id, stageId);
   }
+
+  @Mutation()
+  async assignUserToTask(
+    @Args('taskId', ParseIntPipe) taskId: number,
+    @Args('userId', ParseIntPipe) userId: number,
+  ) {
+    return this.taskService.assignUserToTask(taskId, userId);
+  }
+
+  @Mutation()
+  async unAssignUserFromTask(
+    @Args('taskId', ParseIntPipe) taskId: number,
+    @Args('userId', ParseIntPipe) userId: number,
+  ) {
+    return this.taskService.unAssignUserFromTask(taskId, userId);
+  }
 }
