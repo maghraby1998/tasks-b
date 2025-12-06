@@ -4,8 +4,6 @@ import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma.service';
 import { MailerService } from '@nestjs-modules/mailer';
-import * as ejs from 'ejs';
-import * as path from 'path';
 
 @Injectable()
 export class AuthService {
@@ -27,22 +25,6 @@ export class AuthService {
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-      await this.mailerService.sendMail({
-        to: email,
-        subject: 'Verifying',
-        // template: __dirname + '/../templates/email',
-        // context: {
-        //   name: 'some random name',
-        // },
-        html: await ejs.renderFile(
-          path.resolve(__dirname + '/../templates/email.ejs'),
-          {
-            name,
-            email,
-          },
-        ),
-      });
-
       const user = await this.prisma.user.create({
         data: {
           name,
@@ -51,14 +33,17 @@ export class AuthService {
         },
       });
 
-      // const payload = { userId: user.id };
+      console.log('Sending verification email to:', user);
 
-      // const access_token = await this.jwtService.signAsync(payload);
-
-      // return {
-      //   user,
-      //   access_token
-      // }
+      await this.mailerService.sendMail({
+        to: user.email,
+        subject: 'Verifying',
+        template: 'verification',
+        context: {
+          name: user.name,
+          url: `http://localhost:5000/verify-email/${user.email}`,
+        },
+      });
 
       return user;
     } catch (err) {

@@ -17,6 +17,7 @@ export class AppController {
     return 'test another thing';
   }
 
+  @Public()
   @Get('/verify-email/:email')
   async verifyEmail(
     @Param('email') email: string,

@@ -50,17 +50,17 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
         service: 'gmail',
         auth: {
           user: 'maghraby1998@gmail.com',
-          pass: 'cbne winl axoc okoc',
+          pass: 'cbne winl axoc okoc', // app password
         },
       },
       defaults: {
         from: 'maghraby1998@gmail.com',
       },
       template: {
-        dir: __dirname + '/templates',
+        dir: join(__dirname, '..', 'templates'),
         adapter: new EjsAdapter(),
         options: {
-          strict: true,
+          strict: false,
         },
       },
     }),
