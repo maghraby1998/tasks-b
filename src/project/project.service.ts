@@ -49,7 +49,12 @@ export class ProjectService {
   async updateProject(projectId: number, name: string, stages: Stage[] = []) {
     return await this.prisma.$transaction(async (tx) => {
       const projectNameExists = await tx.project.findFirst({
-        where: { name },
+        where: {
+          name,
+          id: {
+            not: projectId,
+          },
+        },
       });
 
       if (projectNameExists) {
