@@ -122,6 +122,8 @@ export abstract class IMutation {
 
     abstract deleteTask(id: string): Nullable<Task> | Promise<Nullable<Task>>;
 
+    abstract addDocument(id: string, document: Upload): Nullable<Task> | Promise<Nullable<Task>>;
+
     abstract signIn(input?: Nullable<SignInInput>): Nullable<SignIn> | Promise<Nullable<SignIn>>;
 
     abstract signUp(input?: Nullable<SignUpInput>): Nullable<User> | Promise<Nullable<User>>;
@@ -172,4 +174,5 @@ export class User {
     tasks?: Nullable<Nullable<Task>[]>;
 }
 
+export type Upload = any;
 type Nullable<T> = T | null;

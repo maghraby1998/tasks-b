@@ -14,6 +14,7 @@ import { Task, User } from '@prisma/client';
 import { ProjectService } from 'src/project/project.service';
 import { UserService } from 'src/user/user.service';
 import { PrismaService } from 'src/prisma.service';
+import GraphqlUpload, { FileUpload } from 'graphql-upload/GraphQLUpload.mjs';
 
 @Resolver('Task')
 export class TaskResolver {
@@ -114,5 +115,17 @@ export class TaskResolver {
   @Mutation()
   async deleteTask(@Args('id', ParseIntPipe) id: number) {
     return this.taskService.deleteTask(id);
+  }
+
+  @Mutation()
+  async addDocument(
+    @Args('id', ParseIntPipe) id: number,
+    @Args({
+      name: 'document',
+      type: () => GraphqlUpload,
+    })
+    document: any,
+  ) {
+    return this.taskService.addDocument(id, document);
   }
 }

@@ -19,6 +19,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { AuthGuard } from './guards/auth.guard';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
 
 @Module({
   imports: [
@@ -79,7 +80,9 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
   ],
 })
 export class AppModule {
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer.apply(AuthMiddleware).forRoutes('*');
-  // }
+  configure(consumer) {
+    consumer
+      .apply(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 1 }))
+      .forRoutes('*');
+  }
 }

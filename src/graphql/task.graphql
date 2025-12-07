@@ -12,7 +12,10 @@ type Mutation {
   assignUserToTask(taskId: ID!, userId: ID!): Task
   unAssignUserFromTask(taskId: ID!, userId: ID!): Task
   deleteTask(id: ID!): Task
+  addDocument(id: ID!, document: Upload!): Task
 }
+
+scalar Upload
 
 type Task {
   id: Int!

@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { User } from '@prisma/client';
+import { FileUpload } from 'graphql-upload/processRequest.mjs';
+import { createWriteStream } from 'fs';
 
 @Injectable()
 export class TaskService {
@@ -136,5 +138,13 @@ export class TaskService {
         id,
       },
     });
+  }
+
+  async addDocument(id: number, document: any) {
+    console.log('document', document);
+
+    document.file
+      ?.createReadStream()
+      .pipe(createWriteStream('./uploads/' + document.file.filename));
   }
 }
