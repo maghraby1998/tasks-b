@@ -33,3 +33,14 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+*.png
+*.jpeg
+*.jpg
+*.gif
+*.svg
+*.webp
+*.mp4
+*.mp3
+*.wav
+*.avi
