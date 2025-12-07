@@ -126,6 +126,11 @@ export class TaskResolver {
     return this.taskService.addDocument(id, document?.file);
   }
 
+  @Mutation()
+  async deleteDocument(@Args('id', ParseIntPipe) id: number) {
+    return this.taskService.deleteDocument(id);
+  }
+
   @ResolveField()
   async documents(@Parent() task: Task) {
     return this.taskService.getTaskDocuments(+task.id);

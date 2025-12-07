@@ -124,6 +124,8 @@ export abstract class IMutation {
 
     abstract addDocument(id: string, document: Upload): Nullable<Document> | Promise<Nullable<Document>>;
 
+    abstract deleteDocument(id: string): Nullable<Document> | Promise<Nullable<Document>>;
+
     abstract signIn(input?: Nullable<SignInInput>): Nullable<SignIn> | Promise<Nullable<SignIn>>;
 
     abstract signUp(input?: Nullable<SignUpInput>): Nullable<User> | Promise<Nullable<User>>;

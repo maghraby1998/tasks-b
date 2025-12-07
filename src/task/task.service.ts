@@ -3,7 +3,8 @@ import { PrismaService } from 'src/prisma.service';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { User } from '@prisma/client';
 import { FileUpload } from 'graphql-upload/processRequest.mjs';
-import { createWriteStream } from 'fs';
+import { createWriteStream, promises as fs } from 'fs';
+import { join } from 'path';
 
 @Injectable()
 export class TaskService {
@@ -140,9 +141,11 @@ export class TaskService {
   }
 
   async addDocument(id: number, document: FileUpload) {
+    const documentName = `${id}-${new Date().toDateString()}-${document?.filename}`;
+
     document
       ?.createReadStream()
-      .pipe(createWriteStream('./uploads/' + document.filename));
+      .pipe(createWriteStream('./uploads/' + documentName));
 
     const newDocument = await this.prisma.document.create({
       data: {
@@ -151,8 +154,8 @@ export class TaskService {
             id,
           },
         },
-        name: document?.filename,
-        path: '/uploads/' + document?.filename,
+        name: documentName,
+        path: '/uploads/' + documentName,
         created_at: new Date(),
       },
     });
@@ -187,10 +190,26 @@ export class TaskService {
         taskId,
       },
       orderBy: {
-        created_at: 'asc',
+        created_at: 'desc',
       },
     });
 
     return documents?.[0];
+  }
+
+  async deleteDocument(documentId: number) {
+    const document = await this.prisma.document.findUnique({
+      where: { id: documentId },
+    });
+
+    await fs.unlink(
+      join(__dirname, '..', '..', '..', 'uploads', document.name),
+    );
+
+    return this.prisma.document.delete({
+      where: {
+        id: documentId,
+      },
+    });
   }
 }
