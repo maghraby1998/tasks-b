@@ -126,6 +126,6 @@ export class TaskResolver {
     })
     document: any,
   ) {
-    return this.taskService.addDocument(id, document);
+    return this.taskService.addDocument(id, document?.file);
   }
 }

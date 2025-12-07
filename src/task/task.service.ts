@@ -140,11 +140,11 @@ export class TaskService {
     });
   }
 
-  async addDocument(id: number, document: any) {
+  async addDocument(id: number, document: FileUpload) {
     console.log('document', document);
 
-    document.file
+    document
       ?.createReadStream()
-      .pipe(createWriteStream('./uploads/' + document.file.filename));
+      .pipe(createWriteStream('./uploads/' + document.filename));
   }
 }
