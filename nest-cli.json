@@ -8,10 +8,6 @@
       {
         "include": "templates/**/*",
         "watchAssets": true
-      },
-      {
-        "include": "uploads/**/*",
-        "watchAssets": true
       }
     ]
   }
