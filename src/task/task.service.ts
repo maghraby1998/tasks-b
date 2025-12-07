@@ -41,7 +41,6 @@ export class TaskService {
             id: +createTaskInput.stageId,
           },
         },
-        created_at: new Date(),
         assignees: {
           connect: createTaskInput?.usersIds?.map((id) => ({ id: +id })),
         },
@@ -141,10 +140,57 @@ export class TaskService {
   }
 
   async addDocument(id: number, document: FileUpload) {
-    console.log('document', document);
-
     document
       ?.createReadStream()
       .pipe(createWriteStream('./uploads/' + document.filename));
+
+    const newDocument = await this.prisma.document.create({
+      data: {
+        task: {
+          connect: {
+            id,
+          },
+        },
+        name: document?.filename,
+        path: '/uploads/' + document?.filename,
+        created_at: new Date(),
+      },
+    });
+
+    this.prisma.task.update({
+      where: {
+        id,
+      },
+      data: {
+        documents: {
+          connect: {
+            id: newDocument.id,
+          },
+        },
+      },
+    });
+
+    return newDocument;
+  }
+
+  async getTaskDocuments(taskId: number) {
+    return this.prisma.document.findMany({
+      where: {
+        taskId,
+      },
+    });
+  }
+
+  async getTaskCardThumbnail(taskId: number) {
+    const documents = await this.prisma.document.findMany({
+      where: {
+        taskId,
+      },
+      orderBy: {
+        created_at: 'asc',
+      },
+    });
+
+    return documents?.[0];
   }
 }

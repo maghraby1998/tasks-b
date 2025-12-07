@@ -12,7 +12,13 @@ type Mutation {
   assignUserToTask(taskId: ID!, userId: ID!): Task
   unAssignUserFromTask(taskId: ID!, userId: ID!): Task
   deleteTask(id: ID!): Task
-  addDocument(id: ID!, document: Upload!): Task
+  addDocument(id: ID!, document: Upload!): Document
+}
+
+type Document {
+  id: ID
+  name: String
+  path: String
 }
 
 scalar Upload
@@ -26,6 +32,8 @@ type Task {
   stage: Stage
   createdBy: User
   description: String
+  documents: [Document]
+  thumbnail: Document
 }
 
 input CreateTaskInput {

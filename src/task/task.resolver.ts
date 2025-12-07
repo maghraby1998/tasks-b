@@ -14,7 +14,7 @@ import { Task, User } from '@prisma/client';
 import { ProjectService } from 'src/project/project.service';
 import { UserService } from 'src/user/user.service';
 import { PrismaService } from 'src/prisma.service';
-import GraphqlUpload, { FileUpload } from 'graphql-upload/GraphQLUpload.mjs';
+import GraphqlUpload from 'graphql-upload/GraphQLUpload.mjs';
 
 @Resolver('Task')
 export class TaskResolver {
@@ -120,12 +120,19 @@ export class TaskResolver {
   @Mutation()
   async addDocument(
     @Args('id', ParseIntPipe) id: number,
-    @Args({
-      name: 'document',
-      type: () => GraphqlUpload,
-    })
+    @Args('document')
     document: any,
   ) {
     return this.taskService.addDocument(id, document?.file);
+  }
+
+  @ResolveField()
+  async documents(@Parent() task: Task) {
+    return this.taskService.getTaskDocuments(+task.id);
+  }
+
+  @ResolveField()
+  async thumbnail(@Parent() task: Task) {
+    return this.taskService.getTaskCardThumbnail(+task.id);
   }
 }

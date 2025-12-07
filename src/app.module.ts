@@ -20,6 +20,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { AuthGuard } from './guards/auth.guard';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -68,6 +69,13 @@ import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
     AuthModule,
     ProjectModule,
     InvitationModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'uploads'),
+      serveRoot: '/uploads',
+      serveStaticOptions: {
+        index: false,
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [

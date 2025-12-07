@@ -122,7 +122,7 @@ export abstract class IMutation {
 
     abstract deleteTask(id: string): Nullable<Task> | Promise<Nullable<Task>>;
 
-    abstract addDocument(id: string, document: Upload): Nullable<Task> | Promise<Nullable<Task>>;
+    abstract addDocument(id: string, document: Upload): Nullable<Document> | Promise<Nullable<Document>>;
 
     abstract signIn(input?: Nullable<SignInInput>): Nullable<SignIn> | Promise<Nullable<SignIn>>;
 
@@ -151,6 +151,12 @@ export class Stage {
     color?: Nullable<string>;
 }
 
+export class Document {
+    id?: Nullable<string>;
+    name?: Nullable<string>;
+    path?: Nullable<string>;
+}
+
 export class Task {
     id: number;
     name?: Nullable<string>;
@@ -160,6 +166,8 @@ export class Task {
     stage?: Nullable<Stage>;
     createdBy?: Nullable<User>;
     description?: Nullable<string>;
+    documents?: Nullable<Nullable<Document>[]>;
+    thumbnail?: Nullable<Document>;
 }
 
 export class SignIn {
