@@ -14,7 +14,7 @@ export class AppController {
   @Public()
   @Get('/')
   async test() {
-    return 'test another thing';
+    return this.appService.getHello();
   }
 
   @Public()

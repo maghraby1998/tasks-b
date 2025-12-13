@@ -21,9 +21,15 @@ import { AuthGuard } from './guards/auth.guard';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { ConfigModule } from '@nestjs/config';
+import configuration from 'config/configuration';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+    }),
     PrometheusModule.register({
       path: '/mymetrics',
     }),

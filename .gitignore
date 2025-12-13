@@ -44,3 +44,6 @@ lerna-debug.log*
 *.mp3
 *.wav
 *.avi
+
+
+.env
