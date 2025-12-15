@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma.service';
-import { MailerService } from '@nestjs-modules/mailer';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +11,7 @@ export class AuthService {
     private userService: UserService,
     private jwtService: JwtService,
     private prisma: PrismaService,
-    private mailerService: MailerService,
+    private mailService: MailService,
   ) {}
 
   async signUp(name: string, email: string, password: string) {
@@ -33,10 +33,8 @@ export class AuthService {
         },
       });
 
-      console.log('Sending verification email to:', user);
-
-      await this.mailerService.sendMail({
-        to: user.email,
+      await this.mailService.sendEmail({
+        user,
         subject: 'Verifying',
         template: 'verification',
         context: {

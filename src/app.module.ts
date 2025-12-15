@@ -1,11 +1,10 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { TaskModule } from './task/task.module';
 import { AuthModule } from './auth/auth.module';
 import { ProjectModule } from './project/project.module';
@@ -14,15 +13,14 @@ import { PrismaService } from './prisma.service';
 import { JwtModule } from '@nestjs/jwt';
 import { InvitationModule } from './invitation/invitation.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { GraphQLError, GraphQLFormattedError } from 'graphql';
-import { MailerModule } from '@nestjs-modules/mailer';
-import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { AuthGuard } from './guards/auth.guard';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import configuration from 'config/configuration';
+import { BullModule } from '@nestjs/bullmq';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -53,25 +51,6 @@ import configuration from 'config/configuration';
       secret: 'randomsecretkeyfornowishouldchangeitforlater',
       signOptions: { expiresIn: '1000s' },
     }),
-    MailerModule.forRoot({
-      transport: {
-        service: 'gmail',
-        auth: {
-          user: 'maghraby1998@gmail.com',
-          pass: 'cbne winl axoc okoc', // app password
-        },
-      },
-      defaults: {
-        from: 'maghraby1998@gmail.com',
-      },
-      template: {
-        dir: join(__dirname, '..', 'templates'),
-        adapter: new EjsAdapter(),
-        options: {
-          strict: false,
-        },
-      },
-    }),
     AuthModule,
     ProjectModule,
     InvitationModule,
@@ -82,6 +61,13 @@ import configuration from 'config/configuration';
         index: false,
       },
     }),
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    MailModule,
   ],
   controllers: [AppController],
   providers: [
