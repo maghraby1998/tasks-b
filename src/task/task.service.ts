@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { User } from '@prisma/client';
@@ -164,6 +164,10 @@ export class TaskService {
 
   async addDocument(id: number, document: FileUpload) {
     const documentName = `${id}-${new Date().toDateString()}-${document?.filename}`;
+
+    if (!['image/jpeg', 'image/png'].includes(document.mimetype)) {
+      throw new BadRequestException('Only JPG and PNG images are allowed');
+    }
 
     document
       ?.createReadStream()
