@@ -5,12 +5,27 @@ import { PrismaService } from 'src/prisma.service';
 export class NotificationService {
   constructor(private prismaService: PrismaService) {}
 
-  async getUserNotifications(userId: number) {
-    return this.prismaService.notification.findMany({
+  async getUserNotifications(userId: number, first: number, after?: number) {
+    const tasks = await this.prismaService.notification.findMany({
       where: {
         userId,
       },
+      cursor: after ? { id: after } : undefined,
+      take: first + 1,
+      skip: after ? 1 : 0,
+      orderBy: { created_at: 'desc' },
     });
+
+    const hasNextPage = tasks.length > first;
+    const items = hasNextPage ? tasks.slice(0, -1) : tasks;
+
+    return {
+      notifications: items,
+      pageInfo: {
+        endCursor: items.length ? items[items.length - 1].id : null,
+        hasNextPage,
+      },
+    };
   }
 
   async create(userId: number, title: string, message: string) {

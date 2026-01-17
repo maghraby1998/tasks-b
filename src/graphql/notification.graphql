@@ -1,7 +1,9 @@
 type Query {
-  notifications: [Notification!]!
+  notifications(first: Int!, after: ID): NotificationsResponse
   notification(id: ID!): Notification
 }
+
+scalar DateTime
 
 type Notification {
   id: ID!
@@ -9,5 +11,15 @@ type Notification {
   message: String!
   user: User
   isRead: Boolean!
-  created_at: String!
+  created_at: DateTime!
+}
+
+type NotificationsResponse {
+  notifications: [Notification!]!
+  pageInfo: PageInfo!
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
 }

@@ -22,6 +22,7 @@ import configuration from 'config/configuration';
 // import { BullModule } from '@nestjs/bullmq';
 import { MailModule } from './mail/mail.module';
 import { NotificationModule } from './notification/notification.module';
+import { DateTimeScalar } from './date-time.scalar';
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { NotificationModule } from './notification/notification.module';
   providers: [
     AppService,
     PrismaService,
+    DateTimeScalar,
     {
       provide: 'APP_GUARD',
       useClass: AuthGuard,
@@ -84,7 +86,7 @@ import { NotificationModule } from './notification/notification.module';
 export class AppModule {
   configure(consumer) {
     consumer
-      .apply(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 1 }))
+      .apply(graphqlUploadExpress({ maxFileSize: 15000000, maxFiles: 1 }))
       .forRoutes('*');
   }
 }

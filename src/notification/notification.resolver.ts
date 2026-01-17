@@ -1,4 +1,4 @@
-import { Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Notification, User } from '@prisma/client';
 import { Auth } from 'src/decorators/auth.decorator';
 import { UserService } from 'src/user/user.service';
@@ -12,8 +12,12 @@ export class NotificationResolver {
   ) {}
 
   @Query('notifications')
-  async notifications(@Auth() auth: User) {
-    return this.notificationService.getUserNotifications(auth.id);
+  async notifications(
+    @Auth() auth: User,
+    @Args('first') first: number,
+    @Args('after') after?: number,
+  ) {
+    return this.notificationService.getUserNotifications(auth.id, first, after);
   }
 
   @ResolveField('user')

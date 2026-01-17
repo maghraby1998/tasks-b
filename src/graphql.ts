@@ -82,7 +82,7 @@ export abstract class IQuery {
 
     abstract receivedInvitations(): Nullable<Nullable<Invitation>[]> | Promise<Nullable<Nullable<Invitation>[]>>;
 
-    abstract notifications(): Notification[] | Promise<Notification[]>;
+    abstract notifications(first: number, after?: Nullable<string>): Nullable<NotificationsResponse> | Promise<Nullable<NotificationsResponse>>;
 
     abstract notification(id: string): Nullable<Notification> | Promise<Nullable<Notification>>;
 
@@ -145,7 +145,17 @@ export class Notification {
     message: string;
     user?: Nullable<User>;
     isRead: boolean;
-    created_at: string;
+    created_at: DateTime;
+}
+
+export class NotificationsResponse {
+    notifications: Notification[];
+    pageInfo: PageInfo;
+}
+
+export class PageInfo {
+    endCursor?: Nullable<string>;
+    hasNextPage: boolean;
 }
 
 export class Project {
@@ -197,5 +207,6 @@ export class User {
     tasks?: Nullable<Nullable<Task>[]>;
 }
 
+export type DateTime = any;
 export type Upload = any;
 type Nullable<T> = T | null;
