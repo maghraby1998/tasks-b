@@ -144,9 +144,8 @@ export class Notification {
     title: string;
     message: string;
     user?: Nullable<User>;
-    read: boolean;
-    createdAt: string;
-    updatedAt: string;
+    isRead: boolean;
+    created_at: string;
 }
 
 export class Project {
