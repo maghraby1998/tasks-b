@@ -10,7 +10,7 @@ export class NotificationService {
       where: {
         userId,
       },
-      cursor: after ? { id: after } : undefined,
+      cursor: after ? { id: +after } : undefined,
       take: first + 1,
       skip: after ? 1 : 0,
       orderBy: { created_at: 'desc' },
