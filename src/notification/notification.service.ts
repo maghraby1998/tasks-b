@@ -49,4 +49,19 @@ export class NotificationService {
       })),
     });
   }
+
+  async markNotificationsAsRead(userId: number) {
+    await this.prismaService.notification.updateMany({
+      where: {
+        userId,
+      },
+      data: {
+        isRead: true,
+      },
+    });
+
+    return {
+      status: 'success',
+    };
+  }
 }

@@ -3,6 +3,14 @@ type Query {
   notification(id: ID!): Notification
 }
 
+type Mutation {
+  markNotificationsAsRead: MarkNotificationResponse
+}
+
+type MarkNotificationResponse {
+  status: String
+}
+
 scalar DateTime
 
 type Notification {

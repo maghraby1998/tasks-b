@@ -104,6 +104,8 @@ export abstract class IMutation {
 
     abstract cancelInvitation(invitationId?: Nullable<number>): Nullable<Invitation> | Promise<Nullable<Invitation>>;
 
+    abstract markNotificationsAsRead(): Nullable<MarkNotificationResponse> | Promise<Nullable<MarkNotificationResponse>>;
+
     abstract upsertProject(input?: Nullable<UpsertProjectInput>): Nullable<Project> | Promise<Nullable<Project>>;
 
     abstract updateProject(input?: Nullable<UpdateProjectInput>): Nullable<Project> | Promise<Nullable<Project>>;
@@ -137,6 +139,10 @@ export abstract class IMutation {
 
 export abstract class ISubscription {
     abstract invitationAccepted(): Nullable<string> | Promise<Nullable<string>>;
+}
+
+export class MarkNotificationResponse {
+    status?: Nullable<string>;
 }
 
 export class Notification {
