@@ -3,7 +3,7 @@ import { MailService } from './mail.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { join } from 'path';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
-import { BullModule } from '@nestjs/bullmq';
+// import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
@@ -26,9 +26,9 @@ import { BullModule } from '@nestjs/bullmq';
         },
       },
     }),
-    BullModule.registerQueue({
-      name: 'mails',
-    }),
+    // BullModule.registerQueue({
+    //   name: 'mails',
+    // }),
   ],
   providers: [MailService],
 })
