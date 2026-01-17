@@ -21,6 +21,7 @@ import { ConfigModule } from '@nestjs/config';
 import configuration from 'config/configuration';
 // import { BullModule } from '@nestjs/bullmq';
 import { MailModule } from './mail/mail.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { MailModule } from './mail/mail.module';
     //   },
     // }),
     MailModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [

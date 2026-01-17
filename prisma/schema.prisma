@@ -41,6 +41,7 @@ model User {
   invitationsSent    ProjectInvitations[] @relation(name: "sender")
   InvitationReceived ProjectInvitations[] @relation(name: "receiver")
   createdTasks       Task[]               @relation("TaskCreator")
+  notifications      Notification[]
 }
 
 model Task {
@@ -76,4 +77,14 @@ model Document {
   taskId     Int
   task       Task      @relation(fields: [taskId], references: [id])
   created_at DateTime? @default(now())
+}
+
+model Notification {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  title      String
+  message    String
+  isRead     Boolean  @default(false)
+  created_at DateTime @default(now())
 }

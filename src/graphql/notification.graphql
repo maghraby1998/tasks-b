@@ -1,0 +1,14 @@
+type Query {
+  notifications: [Notification!]!
+  notification(id: ID!): Notification
+}
+
+type Notification {
+  id: ID!
+  title: String!
+  message: String!
+  user: User
+  read: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}

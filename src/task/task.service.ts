@@ -5,10 +5,14 @@ import { User } from '@prisma/client';
 import { FileUpload } from 'graphql-upload/processRequest.mjs';
 import { createWriteStream, promises as fs } from 'fs';
 import { join } from 'path';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class TaskService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private notificationService: NotificationService,
+  ) {}
 
   async findTask(id: number) {
     return this.prisma.task.findUnique({
@@ -53,6 +57,20 @@ export class TaskService {
         description: createTaskInput.description,
       },
     });
+
+    if (createTaskInput?.usersIds?.length) {
+      const notifications = [];
+      createTaskInput.usersIds?.forEach((userId) => {
+        notifications.push({
+          userId: +userId,
+          title: 'New Task',
+          message: task.name,
+          another: 'sdf',
+        });
+      });
+
+      await this.notificationService.createNotifications(notifications);
+    }
 
     return task;
   }
@@ -103,7 +121,7 @@ export class TaskService {
   }
 
   async assignUserToTask(taskId: number, userId: number) {
-    return this.prisma.task.update({
+    const task = await this.prisma.task.update({
       where: {
         id: taskId,
       },
@@ -115,6 +133,10 @@ export class TaskService {
         },
       },
     });
+
+    await this.notificationService.create(userId, 'New Task', task.name);
+
+    return task;
   }
 
   async unAssignUserFromTask(taskId: number, userId: number) {

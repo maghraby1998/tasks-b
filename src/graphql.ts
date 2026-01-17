@@ -82,6 +82,10 @@ export abstract class IQuery {
 
     abstract receivedInvitations(): Nullable<Nullable<Invitation>[]> | Promise<Nullable<Nullable<Invitation>[]>>;
 
+    abstract notifications(): Notification[] | Promise<Notification[]>;
+
+    abstract notification(id: string): Nullable<Notification> | Promise<Nullable<Notification>>;
+
     abstract project(id: string): Nullable<Project> | Promise<Nullable<Project>>;
 
     abstract projects(): Nullable<Nullable<Project>[]> | Promise<Nullable<Nullable<Project>[]>>;
@@ -133,6 +137,16 @@ export abstract class IMutation {
 
 export abstract class ISubscription {
     abstract invitationAccepted(): Nullable<string> | Promise<Nullable<string>>;
+}
+
+export class Notification {
+    id: string;
+    title: string;
+    message: string;
+    user?: Nullable<User>;
+    read: boolean;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export class Project {
