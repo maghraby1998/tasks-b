@@ -19,7 +19,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
         from: 'maghraby1998@gmail.com',
       },
       template: {
-        dir: join(__dirname, '..', 'templates'),
+        dir: join(__dirname, '..', '..', 'templates'),
         adapter: new EjsAdapter(),
         options: {
           strict: false,
