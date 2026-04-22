@@ -47,5 +47,3 @@ lerna-debug.log*
 
 
 .env
-
-*.db
